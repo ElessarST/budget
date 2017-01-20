@@ -17,6 +17,7 @@ public class SberbankParser extends CommonParser {
     private static final String POKUPKA = "покупка";
     private static final String OPLATA = "оплата";
     private static final String RUB_PARAM = "р";
+    private static final String DOLLAR_PARAM = "USD";
     private static final String BALANS = "Баланс:";
 
     @Override
@@ -53,11 +54,12 @@ public class SberbankParser extends CommonParser {
 
     private float getSum(String s) {
         return Float.parseFloat(s.replaceAll(RUB_PARAM, "")
+                .replaceAll(DOLLAR_PARAM, "")
                 .trim());
     }
 
     @Override
-    protected boolean isSpending(String text) {
+    public boolean isSpending(String text) {
         String[] words = text.split(" ");
         return words.length > 2 && words[3].contains(POKUPKA);
     }

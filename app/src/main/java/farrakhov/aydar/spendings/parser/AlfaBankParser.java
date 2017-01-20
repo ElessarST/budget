@@ -55,7 +55,7 @@ public class AlfaBankParser extends CommonParser {
     }
 
     @Override
-    protected boolean isSpending(String text) {
+    public boolean isSpending(String text) {
         String[] splitted = text.split(";");
         if (splitted.length < 7 || !splitted[1].contains(BUY_PARAM)){
             return false;

@@ -10,6 +10,8 @@ public final class RepositoryProvider {
 
     private static ISpendingProvider sSpendingRepository;
 
+    private static ICreditCardProvider sCreditCardProvider;
+
     private RepositoryProvider() {
     }
 
@@ -21,6 +23,14 @@ public final class RepositoryProvider {
         return sSpendingRepository;
     }
 
+    @NonNull
+    public static ICreditCardProvider provideCreditCardProvider() {
+        if (sCreditCardProvider == null) {
+            sCreditCardProvider = new CreditCardProvider();
+        }
+        return sCreditCardProvider;
+    }
+
     public static void setSpendingRepository(ISpendingProvider spendingRepository) {
         sSpendingRepository = spendingRepository;
     }
@@ -28,5 +38,6 @@ public final class RepositoryProvider {
     @MainThread
     public static void init() {
         sSpendingRepository = new SpendingProvider();
+        sCreditCardProvider = new CreditCardProvider();
     }
 }

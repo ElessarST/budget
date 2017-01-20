@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import farrakhov.aydar.spendings.content.CreditCard;
 import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.repository.RepositoryProvider;
 import farrakhov.aydar.spendings.util.SMSReader;
@@ -25,21 +26,33 @@ public class MainPresenter {
     public void init(Context context) {
         mView.requestSmsReadPermission();
 
-//        RepositoryProvider.provideSpendingRepository()
-//                .getAllSpending();
-
         RepositoryProvider.provideSpendingRepository()
                 .saveSpending(SMSReader.getNewSms(context));
-
-        showSms();
+        showCreditCards();
+        showSpendings();
     }
 
-    private void showSms() {
+    private void showCreditCards() {
+        List<CreditCard> creditCards = new ArrayList<>();
+        RepositoryProvider.provideCreditCardProvider()
+                .getAllCreditCards()
+                .subscribe(creditCards::add);
+        mView.showCreditCards(creditCards);
+    }
+
+    private void showSpendings() {
         List<Spending> spendingList = new ArrayList<>();
-        RepositoryProvider.provideSpendingRepository().getAllSpending()
+        RepositoryProvider.provideSpendingRepository().getSpendings(1)
                 .subscribe(spendingList::add);
         mView.showSpendings(spendingList);
     }
 
 
+    public void updateAll(Context context) {
+        RepositoryProvider.provideSpendingRepository()
+                .deleteAllSpendings();
+
+        init(context);
+
+    }
 }

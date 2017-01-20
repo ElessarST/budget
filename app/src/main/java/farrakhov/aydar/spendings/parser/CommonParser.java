@@ -20,14 +20,14 @@ public abstract class CommonParser implements IParser {
     private static final String UNKNOWN_NAME = "Другие";
 
     @Override
-    public Spending parse(String text, Date date) {
+    public Spending parse(String text, Date date, long smsId) {
         if (!isSpending(text)){
             return null;
         }
-        return createSpending(getSpendingData(text));
+        return createSpending(getSpendingData(text), smsId);
     }
 
-    private Spending createSpending(SpendingTmpData spendingData) {
+    private Spending createSpending(SpendingTmpData spendingData, long smsId) {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         Spending spending = new Spending();
@@ -37,6 +37,7 @@ public abstract class CommonParser implements IParser {
         spending.setDate(spendingData.getDate().toDate());
         spending.setSum(spendingData.getSum());
         spending.setShop(getOrCreateShop(spendingData.getShopName(), spendingData.getType()));
+        spending.setSmsId(smsId);
         spending = realm.copyToRealm(spending);
         realm.commitTransaction();
 
@@ -108,7 +109,7 @@ public abstract class CommonParser implements IParser {
 
     protected abstract SpendingTmpData getSpendingData(String text);
 
-    protected abstract boolean isSpending(String text);
+    public abstract boolean isSpending(String text);
 
     private Long getNextId(Realm realm, Class c){
         Number number = realm.where(c).max("id");

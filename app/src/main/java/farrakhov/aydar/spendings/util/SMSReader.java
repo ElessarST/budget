@@ -40,10 +40,14 @@ public class SMSReader {
                 objSms.setType(CreditCardType.getByNumber(number));
                 objSms.setText(c.getString(c.getColumnIndexOrThrow("body")));
                 objSms.setDate(new Date(c.getLong(c.getColumnIndexOrThrow("date"))));
+                objSms.setId(c.getLong(c.getColumnIndexOrThrow("_id")));
                 if (objSms.getType() != null) {
                     if (lastSpending == null ||
-                            lastSpending.getDate().getTime() < objSms.getDate().getTime())
-                    lstSms.add(objSms);
+                            (lastSpending.getSmsId() < objSms.getId())) {
+                        lstSms.add(objSms);
+                    } else {
+                        break;
+                    }
                 }
                 c.moveToNext();
             }

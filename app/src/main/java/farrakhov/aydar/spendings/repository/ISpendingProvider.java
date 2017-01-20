@@ -12,7 +12,9 @@ public interface ISpendingProvider {
 
     Observable<Spending> saveSpending(Observable<Sms> messages);
 
-    Observable<Spending> getAllSpending();
+    Observable<Spending> getSpendings(int page);
 
     Spending getLastSpending();
+
+    void deleteAllSpendings();
 }

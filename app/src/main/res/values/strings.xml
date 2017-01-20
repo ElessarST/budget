@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Spendings</string>
     <string name="budget">Budget</string>
+    <string name="delete_all">delete all</string>
+    <string name="update_all">update all</string>
+    <string name="last_spendings">Последние траты</string>
+    <string name="credit_cards">Карты</string>
+    <string name="title_activity_spending">SpendingActivity</string>
 </resources>

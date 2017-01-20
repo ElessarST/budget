@@ -23,6 +23,8 @@ public class Spending extends RealmObject {
 
     private CreditCard card;
 
+    private Long smsId;
+
     public Long getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class Spending extends RealmObject {
 
     public void setCard(CreditCard card) {
         this.card = card;
+    }
+
+    public Long getSmsId() {
+        return smsId;
+    }
+
+    public void setSmsId(Long smsId) {
+        this.smsId = smsId;
     }
 }

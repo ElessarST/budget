@@ -17,22 +17,32 @@ import rx.Observable;
 
 public class SpendingProvider implements ISpendingProvider {
 
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
     @Override
     public Observable<Spending> saveSpending(Observable<Sms> messages) {
         List<Spending> spending = new ArrayList<>();
         messages.sorted((m1, m2) -> m2.getDate().compareTo(m1.getDate()))
                 .forEach(sms -> spending.add(ParserProvider.getParser(sms.getType())
-                .parse(sms.getText(), sms.getDate())));
+                .parse(sms.getText(), sms.getDate(), sms.getId())));
         return Observable.just(spending)
                 .flatMap(Observable::from);
     }
 
     @Override
-    public Observable<Spending> getAllSpending() {
+    public Observable<Spending> getSpendings(int page) {
+
+        int offset = (page - 1) * DEFAULT_PAGE_SIZE;
+        int limit = DEFAULT_PAGE_SIZE;
+
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        List<Spending> spending = realm.where(Spending.class).findAllSorted("date", Sort.DESCENDING);
+        List<Spending> spending = realm.where(Spending.class)
+                .findAllSorted("date", Sort.DESCENDING);
         realm.commitTransaction();
+        if (spending.size() > limit) {
+            spending = spending.subList(offset, limit);
+        }
         return  Observable.just(spending)
                 .flatMap(Observable::from);
     }
@@ -41,8 +51,18 @@ public class SpendingProvider implements ISpendingProvider {
     public Spending getLastSpending() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Spending> spendings = realm.where(Spending.class)
-                .findAllSorted("date", Sort.DESCENDING);
+                .findAllSorted("smsId", Sort.DESCENDING);
         return spendings.isEmpty() ? null : spendings.first();
     }
+
+    @Override
+    public void deleteAllSpendings() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.delete(Spending.class);
+        realm.commitTransaction();
+    }
+
+
 
 }

@@ -10,6 +10,8 @@ import farrakhov.aydar.spendings.content.Spending;
 
 public interface IParser {
 
-    Spending parse(String text, Date date);
+    Spending parse(String text, Date date, long id);
+
+    boolean isSpending(String text);
 
 }
