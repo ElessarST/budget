@@ -11,4 +11,5 @@ public interface ICategoryProvider {
 
     Observable<Category> getAll();
 
+    void create(String name);
 }

@@ -18,4 +18,6 @@
     <string name="save_name">Сохранить имя</string>
     <string name="union_shops">Объединить магазины</string>
     <string name="categories">Категории</string>
+    <string name="add">Добавить</string>
+    <string name="change_category">Изменить категорию</string>
 </resources>

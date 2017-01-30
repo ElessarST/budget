@@ -1,8 +1,8 @@
 package farrakhov.aydar.spendings.repository.impl;
 
 import java.util.List;
-import java.util.Objects;
 
+import farrakhov.aydar.spendings.content.Category;
 import farrakhov.aydar.spendings.content.Shop;
 import farrakhov.aydar.spendings.content.ShopBankName;
 import farrakhov.aydar.spendings.content.Spending;
@@ -35,13 +35,12 @@ public class ShopProvider implements IShopProvider {
     }
 
     @Override
-    public Observable<Shop> getShops(Long id) {
+    public Observable<Shop> getAll() {
         Realm realm = Realm.getDefaultInstance();
         List<Shop> shops = realm.where(Shop.class)
                 .findAll();
         return Observable.just(shops)
-                .flatMap(Observable::from)
-                .filter(s -> !Objects.equals(s.getId(), id));
+                .flatMap(Observable::from);
     }
 
     @Override
@@ -60,6 +59,15 @@ public class ShopProvider implements IShopProvider {
         mainShop.getSpending().addAll(spendings);
         RealmResults<Shop> result = realm.where(Shop.class).equalTo("id", unionShop.getId()).findAll();
         result.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void change(Long id, Category category) {
+        Shop shop = get(id);
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        shop.setCategory(category);
         realm.commitTransaction();
     }
 }

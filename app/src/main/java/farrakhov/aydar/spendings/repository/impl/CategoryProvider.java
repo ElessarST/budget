@@ -4,6 +4,7 @@ import java.util.List;
 
 import farrakhov.aydar.spendings.content.Category;
 import farrakhov.aydar.spendings.repository.ICategoryProvider;
+import farrakhov.aydar.spendings.util.RealmUtil;
 import io.realm.Realm;
 import rx.Observable;
 
@@ -22,5 +23,20 @@ public class CategoryProvider implements ICategoryProvider {
         realm.commitTransaction();
         return  Observable.just(creditCards)
                 .flatMap(Observable::from);
+    }
+
+    @Override
+    public void create(String name) {
+        Realm realm = Realm.getDefaultInstance();
+        Category category = realm.where(Category.class)
+                .equalTo("name", name)
+                .findFirst();
+        if (category != null) return;
+        realm.beginTransaction();
+        Category newCategory = new Category();
+        newCategory.setId(RealmUtil.getNextId(realm, Category.class));
+        newCategory.setName(name);
+        realm.copyToRealm(newCategory);
+        realm.commitTransaction();
     }
 }

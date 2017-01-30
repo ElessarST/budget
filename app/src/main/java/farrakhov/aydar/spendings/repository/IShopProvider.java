@@ -1,6 +1,7 @@
 package farrakhov.aydar.spendings.repository;
 
 
+import farrakhov.aydar.spendings.content.Category;
 import farrakhov.aydar.spendings.content.Shop;
 import rx.Observable;
 
@@ -14,7 +15,7 @@ public interface IShopProvider {
 
     void change(Long id, String name);
 
-    Observable<Shop> getShops(Long id);
+    Observable<Shop> getAll();
 
     /**
      *
@@ -22,4 +23,6 @@ public interface IShopProvider {
      * @param unionShops присоединяемый магазин
      */
     void union(Shop mainShop, Shop unionShops);
+
+    void change(Long id, Category category);
 }

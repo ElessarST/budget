@@ -44,12 +44,25 @@
         android:layout_height="wrap_content" />
 
     <CheckBox
+        android:layout_marginBottom="@dimen/margin_10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/union_shops"
         android:checked="false"
         android:id="@+id/union_shops"/>
 
+    <Spinner
+        android:layout_marginBottom="@dimen/margin_10"
+        android:id="@+id/categories_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_category"
+        android:checked="false"
+        android:id="@+id/change_category"/>
 
 
 

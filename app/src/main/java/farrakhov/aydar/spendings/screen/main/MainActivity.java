@@ -26,7 +26,8 @@ import farrakhov.aydar.spendings.widget.DividerItemDecoration;
 import static farrakhov.aydar.spendings.screen.spending.SpendingActivity.SPENDING_ID_ATTR;
 
 public class MainActivity extends AppCompatActivity implements MainView,
-        SpendingsAdapter.OnItemClickListener, CategoryAdapter.OnItemClickListener {
+        SpendingsAdapter.OnItemClickListener,
+        CategoryAdapter.OnItemClickListener, AddCategoryDialog.AddCategoryDialogListener {
 
     public static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
 
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements MainView,
 
     @BindView(R.id.updateAllButton)
     Button mUpdateButton;
+
+    @BindView(R.id.add_category)
+    Button mCreateCategoryButton;
 
     private SpendingsAdapter mAdapter;
     private CreditCardAdapter mCreditCardAdapter;
@@ -65,6 +69,11 @@ public class MainActivity extends AppCompatActivity implements MainView,
 
         mUpdateButton.setOnClickListener(i -> {
             mPresenter.updateAll(this);
+        });
+
+        mCreateCategoryButton.setOnClickListener(i -> {
+            new AddCategoryDialog()
+                    .show(getFragmentManager(), "dialog");
         });
 
     }
@@ -151,6 +160,11 @@ public class MainActivity extends AppCompatActivity implements MainView,
     @Override
     public void onItemClick(Category item) {
 
+    }
+
+    @Override
+    public void add(String name) {
+        mPresenter.addCategory(name);
     }
 }
 

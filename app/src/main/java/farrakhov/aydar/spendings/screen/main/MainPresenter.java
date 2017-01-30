@@ -65,4 +65,9 @@ public class MainPresenter {
         init(context);
 
     }
+
+    public void addCategory(String name) {
+        RepositoryProvider.provideCategoryRepository().create(name);
+        showCategories();
+    }
 }

@@ -9,6 +9,7 @@ import farrakhov.aydar.spendings.content.Shop;
 import farrakhov.aydar.spendings.content.ShopBankName;
 import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.content.SpendingTmpData;
+import farrakhov.aydar.spendings.util.RealmUtil;
 import io.realm.Realm;
 
 /**
@@ -31,7 +32,7 @@ public abstract class CommonParser implements IParser {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         Spending spending = new Spending();
-        spending.setId(getNextId(realm, Spending.class));
+        spending.setId(RealmUtil.getNextId(realm, Spending.class));
         spending.setCard(getOrCreateCreditCard(spendingData.getCardNumber(), spendingData.getType(),
                 spendingData.getCredit()));
         spending.setDate(spendingData.getDate().toDate());
@@ -58,9 +59,9 @@ public abstract class CommonParser implements IParser {
 
     private Shop createShop(String shopName, CreditCardType type, Realm realm) {
         Shop shop = new Shop();
-        shop.setId(getNextId(realm, Shop.class));
+        shop.setId(RealmUtil.getNextId(realm, Shop.class));
         shop.setDisplayName(shopName);
-        shop.getShopBankNames().add(new ShopBankName(getNextId(realm, ShopBankName.class), shopName, shop, type));
+        shop.getShopBankNames().add(new ShopBankName(RealmUtil.getNextId(realm, ShopBankName.class), shopName, shop, type));
         shop.setCategory(getOrCreateUnknownCategory());
         shop = realm.copyToRealm(shop);
         return shop;
@@ -79,7 +80,7 @@ public abstract class CommonParser implements IParser {
 
     private Category createUnknownCategory(Realm realm) {
         Category category = new Category();
-        category.setId(getNextId(realm, Category.class));
+        category.setId(RealmUtil.getNextId(realm, Category.class));
         category.setName(UNKNOWN_NAME);
         category = realm.copyToRealm(category);
         return category;
@@ -100,7 +101,7 @@ public abstract class CommonParser implements IParser {
 
     private CreditCard createCreditCard(String cardNumber, CreditCardType type, Realm realm) {
         CreditCard creditCard = new CreditCard();
-        creditCard.setId(getNextId(realm, CreditCard.class));
+        creditCard.setId(RealmUtil.getNextId(realm, CreditCard.class));
         creditCard.setNumber(cardNumber);
         creditCard.setType(type.toString());
         creditCard = realm.copyToRealm(creditCard);
@@ -111,11 +112,4 @@ public abstract class CommonParser implements IParser {
 
     public abstract boolean isSpending(String text);
 
-    private Long getNextId(Realm realm, Class c){
-        Number number = realm.where(c).max("id");
-        if (number == null) {
-            return 1L;
-        }
-        return (long) (number) + 1;
-    }
 }
