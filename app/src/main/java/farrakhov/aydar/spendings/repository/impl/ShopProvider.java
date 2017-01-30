@@ -1,8 +1,15 @@
 package farrakhov.aydar.spendings.repository.impl;
 
+import java.util.List;
+import java.util.Objects;
+
 import farrakhov.aydar.spendings.content.Shop;
+import farrakhov.aydar.spendings.content.ShopBankName;
+import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.repository.IShopProvider;
 import io.realm.Realm;
+import io.realm.RealmResults;
+import rx.Observable;
 
 /**
  * Created by aydar farrakhov on 29.01.17.
@@ -16,5 +23,43 @@ public class ShopProvider implements IShopProvider {
         return realm.where(Shop.class)
                 .equalTo("id", id)
                 .findFirst();
+    }
+
+    @Override
+    public void change(Long id, String name) {
+        Shop shop = get(id);
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        shop.setDisplayName(name);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public Observable<Shop> getShops(Long id) {
+        Realm realm = Realm.getDefaultInstance();
+        List<Shop> shops = realm.where(Shop.class)
+                .findAll();
+        return Observable.just(shops)
+                .flatMap(Observable::from)
+                .filter(s -> !Objects.equals(s.getId(), id));
+    }
+
+    @Override
+    public void union(Shop mainShop, Shop unionShop) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        List<ShopBankName> bankNames = unionShop.getShopBankNames();
+        for (ShopBankName bankName : bankNames) {
+            bankName.setShop(mainShop);
+        }
+        mainShop.getShopBankNames().addAll(bankNames);
+        List<Spending> spendings = unionShop.getSpending();
+        for (Spending spending : spendings) {
+            spending.setShop(mainShop);
+        }
+        mainShop.getSpending().addAll(spendings);
+        RealmResults<Shop> result = realm.where(Shop.class).equalTo("id", unionShop.getId()).findAll();
+        result.deleteAllFromRealm();
+        realm.commitTransaction();
     }
 }

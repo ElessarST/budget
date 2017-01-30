@@ -14,6 +14,8 @@ public class Category extends RealmObject {
 
     private String name;
 
+    private Budget mBudget;
+
     public Category() {
 
     }
@@ -32,5 +34,13 @@ public class Category extends RealmObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Budget getBudget() {
+        return mBudget;
+    }
+
+    public void setBudget(Budget budget) {
+        mBudget = budget;
     }
 }

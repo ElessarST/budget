@@ -38,7 +38,7 @@ public final class RepositoryProvider {
     }
 
     @NonNull
-    public static IShopProvider providerShopRepository() {
+    public static IShopProvider provideShopRepository() {
         if (sShopProvider == null) {
             sShopProvider = new ShopProvider();
         }

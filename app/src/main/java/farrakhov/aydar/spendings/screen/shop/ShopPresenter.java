@@ -18,7 +18,7 @@ public class ShopPresenter {
     }
 
     public void init(Long id) {
-        Shop shop = RepositoryProvider.providerShopRepository()
+        Shop shop = RepositoryProvider.provideShopRepository()
                 .get(id);
         mView.showShop(shop);
 
