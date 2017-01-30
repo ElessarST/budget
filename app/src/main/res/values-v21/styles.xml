@@ -6,4 +6,20 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="CardView.Light.Prop">
+        <item name="android:layout_marginBottom">@dimen/margin_10</item>
+        <item name="android:padding">@dimen/padding_large</item>
+        <item name="android:textSize">@dimen/text.22</item>
+    </style>
+
+    <style name="PropView">
+        <item name="android:padding">@dimen/padding_20</item>
+
+    </style>
+
+    <style name="PropTheme" parent="AppTheme">
+        <item name="android:textSize">@dimen/text.22</item>
+    </style>
+
 </resources>

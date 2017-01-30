@@ -10,7 +10,7 @@ import java.util.List;
 import farrakhov.aydar.spendings.content.CreditCard;
 
 /**
- * @author Artur Vasilov
+ * @author Aydar Farrakhov
  */
 public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardHolder> {
 

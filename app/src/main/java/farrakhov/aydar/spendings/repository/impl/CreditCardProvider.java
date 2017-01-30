@@ -1,8 +1,9 @@
-package farrakhov.aydar.spendings.repository;
+package farrakhov.aydar.spendings.repository.impl;
 
 import java.util.List;
 
 import farrakhov.aydar.spendings.content.CreditCard;
+import farrakhov.aydar.spendings.repository.ICreditCardProvider;
 import io.realm.Realm;
 import rx.Observable;
 

@@ -6,4 +6,9 @@
     <string name="last_spendings">Последние траты</string>
     <string name="credit_cards">Карты</string>
     <string name="title_activity_spending">SpendingActivity</string>
+    <string name="spendings">Затраты</string>
+    <string name="category">Категория</string>
+    <string name="shop">Магазин</string>
+    <string name="credit_card">Карта</string>
+    <string name="title_activity_shop">ShopActivity</string>
 </resources>

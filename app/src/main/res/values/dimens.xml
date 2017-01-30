@@ -35,4 +35,6 @@
     <dimen name="text.22">22sp</dimen>
     <dimen name="text.24">24sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="width_40">40dp</dimen>
 </resources>

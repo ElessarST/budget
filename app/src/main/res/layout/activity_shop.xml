@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="farrakhov.aydar.spendings.screen.spending.SpendingActivity">
+    tools:context="farrakhov.aydar.spendings.screen.shop.ShopActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,6 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_spending"/>
+    <include layout="@layout/content_shop"/>
 
 </android.support.design.widget.CoordinatorLayout>

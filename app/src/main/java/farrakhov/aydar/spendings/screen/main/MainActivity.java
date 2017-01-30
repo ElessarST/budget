@@ -1,6 +1,7 @@
 package farrakhov.aydar.spendings.screen.main;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -17,10 +18,13 @@ import butterknife.ButterKnife;
 import farrakhov.aydar.spendings.R;
 import farrakhov.aydar.spendings.content.CreditCard;
 import farrakhov.aydar.spendings.content.Spending;
+import farrakhov.aydar.spendings.screen.spending.SpendingActivity;
 import farrakhov.aydar.spendings.util.SMSReader;
 import farrakhov.aydar.spendings.widget.DividerItemDecoration;
 
-public class MainActivity extends AppCompatActivity implements MainView {
+import static farrakhov.aydar.spendings.screen.spending.SpendingActivity.SPENDING_ID_ATTR;
+
+public class MainActivity extends AppCompatActivity implements MainView, SpendingsAdapter.OnItemClickListener {
 
     public static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
 
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 LinearLayoutManager.VERTICAL, false);
         mSpendingsRecycler.setLayoutManager(layoutManager);
         mSpendingsRecycler.addItemDecoration(new DividerItemDecoration(this));
-        mAdapter = new SpendingsAdapter();
+        mAdapter = new SpendingsAdapter(this);
         mSpendingsRecycler.setAdapter(mAdapter);
     }
 
@@ -114,6 +118,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void showCreditCards(List<CreditCard> creditCards) {
         mCreditCardAdapter.changeDataSet(creditCards);
+    }
+
+    @Override
+    public void onItemClick(Spending item) {
+        Intent intent = new Intent(this, SpendingActivity.class);
+        intent.putExtra(SPENDING_ID_ATTR, item.getId());
+        startActivity(intent);
     }
 }
 

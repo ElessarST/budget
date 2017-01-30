@@ -1,4 +1,4 @@
-package farrakhov.aydar.spendings.repository;
+package farrakhov.aydar.spendings.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import farrakhov.aydar.spendings.content.Sms;
 import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.parser.ParserProvider;
+import farrakhov.aydar.spendings.repository.ISpendingProvider;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -45,6 +46,14 @@ public class SpendingProvider implements ISpendingProvider {
         }
         return  Observable.just(spending)
                 .flatMap(Observable::from);
+    }
+
+    @Override
+    public Spending get(Long id) {
+        Realm realm = Realm.getDefaultInstance();
+        return realm.where(Spending.class)
+                .equalTo("id", id)
+                .findFirst();
     }
 
     @Override

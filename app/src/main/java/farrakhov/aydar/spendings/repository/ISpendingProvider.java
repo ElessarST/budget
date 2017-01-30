@@ -14,6 +14,8 @@ public interface ISpendingProvider {
 
     Observable<Spending> getSpendings(int page);
 
+    Spending get(Long id);
+
     Spending getLastSpending();
 
     void deleteAllSpendings();

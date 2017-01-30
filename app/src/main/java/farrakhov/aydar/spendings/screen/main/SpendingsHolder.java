@@ -12,7 +12,7 @@ import farrakhov.aydar.spendings.R;
 import farrakhov.aydar.spendings.content.Spending;
 
 /**
- * @author Artur Vasilov
+ * @author Aydar Farrakhov
  */
 public class SpendingsHolder extends RecyclerView.ViewHolder {
 
@@ -36,9 +36,10 @@ public class SpendingsHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(@NonNull Spending spending) {
+    public void bind(@NonNull Spending spending, SpendingsAdapter.OnItemClickListener listener) {
         shopTV.setText(spending.getShop().getDisplayName());
         costTV.setText(String.valueOf(spending.getSum()));
         dateTV.setText(spending.getDate().toString());
+        itemView.setOnClickListener(v -> listener.onItemClick(spending));
     }
 }

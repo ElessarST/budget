@@ -10,15 +10,16 @@ import java.util.List;
 import farrakhov.aydar.spendings.content.Spending;
 
 /**
- * @author Artur Vasilov
+ * @author Aydar Farrakhov
  */
 public class SpendingsAdapter extends RecyclerView.Adapter<SpendingsHolder> {
 
     private final List<Spending> mSpendings;
+    private final OnItemClickListener listener;
 
-
-    public SpendingsAdapter() {
+    public SpendingsAdapter(OnItemClickListener listener) {
         mSpendings = new ArrayList<>();
+        this.listener = listener;
     }
 
     public void changeDataSet(@NonNull List<Spending> movies) {
@@ -35,13 +36,17 @@ public class SpendingsAdapter extends RecyclerView.Adapter<SpendingsHolder> {
     @Override
     public void onBindViewHolder(SpendingsHolder holder, int position) {
         Spending movie = mSpendings.get(position);
-        holder.bind(movie);
+        holder.bind(movie, listener);
 
     }
 
     @Override
     public int getItemCount() {
         return mSpendings.size();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Spending item);
     }
 
 }

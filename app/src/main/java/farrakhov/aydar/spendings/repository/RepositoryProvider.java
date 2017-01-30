@@ -3,6 +3,10 @@ package farrakhov.aydar.spendings.repository;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 
+import farrakhov.aydar.spendings.repository.impl.CreditCardProvider;
+import farrakhov.aydar.spendings.repository.impl.ShopProvider;
+import farrakhov.aydar.spendings.repository.impl.SpendingProvider;
+
 /**
  * @author Aydar Farrakhov
  */
@@ -11,6 +15,8 @@ public final class RepositoryProvider {
     private static ISpendingProvider sSpendingRepository;
 
     private static ICreditCardProvider sCreditCardProvider;
+
+    private static IShopProvider sShopProvider;
 
     private RepositoryProvider() {
     }
@@ -31,8 +37,12 @@ public final class RepositoryProvider {
         return sCreditCardProvider;
     }
 
-    public static void setSpendingRepository(ISpendingProvider spendingRepository) {
-        sSpendingRepository = spendingRepository;
+    @NonNull
+    public static IShopProvider providerShopRepository() {
+        if (sShopProvider == null) {
+            sShopProvider = new ShopProvider();
+        }
+        return sShopProvider;
     }
 
     @MainThread
