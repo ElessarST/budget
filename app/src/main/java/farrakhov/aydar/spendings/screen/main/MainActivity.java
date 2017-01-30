@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import farrakhov.aydar.spendings.R;
+import farrakhov.aydar.spendings.content.Category;
 import farrakhov.aydar.spendings.content.CreditCard;
 import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.screen.spending.SpendingActivity;
@@ -24,7 +25,8 @@ import farrakhov.aydar.spendings.widget.DividerItemDecoration;
 
 import static farrakhov.aydar.spendings.screen.spending.SpendingActivity.SPENDING_ID_ATTR;
 
-public class MainActivity extends AppCompatActivity implements MainView, SpendingsAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements MainView,
+        SpendingsAdapter.OnItemClickListener, CategoryAdapter.OnItemClickListener {
 
     public static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
 
@@ -36,11 +38,15 @@ public class MainActivity extends AppCompatActivity implements MainView, Spendin
     @BindView(R.id.creditRecyclerView)
     RecyclerView mCreditRecyclerView;
 
+    @BindView(R.id.categoriesRecyclerView)
+    RecyclerView mCategoriesRecyclerView;
+
     @BindView(R.id.updateAllButton)
     Button mUpdateButton;
 
     private SpendingsAdapter mAdapter;
     private CreditCardAdapter mCreditCardAdapter;
+    private CategoryAdapter mCategoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Spendin
 
         initSpendings();
         initCreditCards();
+        initCategories();
 
         mPresenter = new MainPresenter(this);
         mPresenter.init(this);
@@ -60,6 +67,15 @@ public class MainActivity extends AppCompatActivity implements MainView, Spendin
             mPresenter.updateAll(this);
         });
 
+    }
+
+    private void initCategories() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
+                LinearLayoutManager.VERTICAL, false);
+        mCategoriesRecyclerView.setLayoutManager(layoutManager);
+        mCategoriesRecyclerView.addItemDecoration(new DividerItemDecoration(this));
+        mCategoryAdapter = new CategoryAdapter(this);
+        mCategoriesRecyclerView.setAdapter(mCategoryAdapter);
     }
 
     private void initCreditCards() {
@@ -121,10 +137,20 @@ public class MainActivity extends AppCompatActivity implements MainView, Spendin
     }
 
     @Override
+    public void showCategories(List<Category> categories) {
+        mCategoryAdapter.changeDataSet(categories);
+    }
+
+    @Override
     public void onItemClick(Spending item) {
         Intent intent = new Intent(this, SpendingActivity.class);
         intent.putExtra(SPENDING_ID_ATTR, item.getId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemClick(Category item) {
+
     }
 }
 

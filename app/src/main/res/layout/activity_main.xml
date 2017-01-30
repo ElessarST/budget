@@ -24,12 +24,23 @@
             android:text="@string/update_all"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/credit_cards"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/credit_cards"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/creditRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/categories"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/categoriesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"/>

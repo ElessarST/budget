@@ -17,4 +17,5 @@
     <string name="cancel">Отмена</string>
     <string name="save_name">Сохранить имя</string>
     <string name="union_shops">Объединить магазины</string>
+    <string name="categories">Категории</string>
 </resources>

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import farrakhov.aydar.spendings.content.Category;
 import farrakhov.aydar.spendings.content.CreditCard;
 import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.repository.RepositoryProvider;
@@ -30,6 +31,15 @@ public class MainPresenter {
                 .saveSpending(SMSReader.getNewSms(context));
         showCreditCards();
         showSpendings();
+        showCategories();
+    }
+
+    private void showCategories() {
+        List<Category> categories = new ArrayList<>();
+        RepositoryProvider.provideCategoryRepository()
+                .getAll()
+                .subscribe(categories::add);
+        mView.showCategories(categories);
     }
 
     private void showCreditCards() {
