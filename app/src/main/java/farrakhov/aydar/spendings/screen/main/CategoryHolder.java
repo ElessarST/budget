@@ -10,7 +10,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import farrakhov.aydar.spendings.R;
 import farrakhov.aydar.spendings.content.Category;
-import farrakhov.aydar.spendings.content.Spending;
 
 /**
  * @author Aydar Farrakhov
@@ -24,7 +23,7 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
 
     @NonNull
     public static CategoryHolder create(@NonNull Context context) {
-        View view = View.inflate(context, R.layout.spending_item, null);
+        View view = View.inflate(context, R.layout.category_item, null);
         return new CategoryHolder(view);
     }
 
