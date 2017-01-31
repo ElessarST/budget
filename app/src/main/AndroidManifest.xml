@@ -11,21 +11,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".screen.main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
         <activity
             android:name=".screen.spending.SpendingActivity"
             android:label="@string/title_activity_spending"
-            android:parentActivityName=".screen.main.MainActivity"
+            android:parentActivityName=".screen.main.StartActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="farrakhov.aydar.spendings.screen.main.MainActivity"/>
+                android:value="farrakhov.aydar.spendings.screen.main.StartActivity"/>
         </activity>
         <activity
             android:name=".screen.shop.ShopActivity"
@@ -39,11 +32,21 @@
         <activity
             android:name=".screen.category.CategoryActivity"
             android:label="@string/title_activity_category"
-            android:parentActivityName=".screen.main.MainActivity"
+            android:parentActivityName=".screen.main.StartActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="farrakhov.aydar.spendings.screen.main.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".screen.main.StartActivity"
+            android:label="@string/title_activity_start"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 
