@@ -14,7 +14,9 @@ public class Category extends RealmObject {
 
     private String name;
 
-    private Budget mBudget;
+    private boolean monthly;
+
+    private Float sum;
 
     public Category() {
 
@@ -36,11 +38,19 @@ public class Category extends RealmObject {
         this.name = name;
     }
 
-    public Budget getBudget() {
-        return mBudget;
+    public boolean isMonthly() {
+        return monthly;
     }
 
-    public void setBudget(Budget budget) {
-        mBudget = budget;
+    public void setMonthly(boolean monthly) {
+        this.monthly = monthly;
+    }
+
+    public Float getSum() {
+        return sum;
+    }
+
+    public void setSum(Float sum) {
+        this.sum = sum;
     }
 }

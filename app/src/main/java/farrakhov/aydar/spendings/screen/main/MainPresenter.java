@@ -70,4 +70,10 @@ public class MainPresenter {
         RepositoryProvider.provideCategoryRepository().create(name);
         showCategories();
     }
+
+    public void changeRest(CreditCard creditCard, Float rest) {
+        RepositoryProvider.provideCreditCardProvider()
+                .changeRest(creditCard.getId(), rest);
+        showCreditCards();
+    }
 }

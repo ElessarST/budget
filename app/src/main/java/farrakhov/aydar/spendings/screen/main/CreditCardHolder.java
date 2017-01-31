@@ -34,9 +34,10 @@ public class CreditCardHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(@NonNull CreditCard creditCard) {
+    public void bind(@NonNull CreditCard creditCard, CreditCardAdapter.OnItemClickListener listener) {
         numberTV.setText(creditCard.getNumber());
         restValTV.setText(String.valueOf(creditCard.getCredit()));
+        itemView.setOnClickListener(v -> listener.onItemClick(creditCard));
     }
 }
 

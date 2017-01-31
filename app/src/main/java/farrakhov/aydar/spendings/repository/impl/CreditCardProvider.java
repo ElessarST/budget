@@ -23,4 +23,22 @@ public class CreditCardProvider implements ICreditCardProvider {
         return  Observable.just(creditCards)
                 .flatMap(Observable::from);
     }
+
+    @Override
+    public CreditCard get(long id) {
+        Realm realm = Realm.getDefaultInstance();
+        return realm.where(CreditCard.class)
+                .equalTo("id", id)
+                .findFirst();
+    }
+
+    @Override
+    public void changeRest(Long id, Float rest) {
+        Realm realm = Realm.getDefaultInstance();
+        CreditCard creditCard = get(id);
+        realm.beginTransaction();
+        creditCard.setCredit(rest);
+        realm.copyToRealm(creditCard);
+        realm.commitTransaction();
+    }
 }

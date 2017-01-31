@@ -19,15 +19,21 @@ import farrakhov.aydar.spendings.R;
 import farrakhov.aydar.spendings.content.Category;
 import farrakhov.aydar.spendings.content.CreditCard;
 import farrakhov.aydar.spendings.content.Spending;
+import farrakhov.aydar.spendings.screen.category.CategoryActivity;
 import farrakhov.aydar.spendings.screen.spending.SpendingActivity;
 import farrakhov.aydar.spendings.util.SMSReader;
 import farrakhov.aydar.spendings.widget.DividerItemDecoration;
 
+import static farrakhov.aydar.spendings.screen.category.CategoryActivity.CATEGORY_ID_ATTR;
+import static farrakhov.aydar.spendings.screen.main.EditCreditDialog.CREDIT_ID_ATTR;
 import static farrakhov.aydar.spendings.screen.spending.SpendingActivity.SPENDING_ID_ATTR;
 
 public class MainActivity extends AppCompatActivity implements MainView,
         SpendingsAdapter.OnItemClickListener,
-        CategoryAdapter.OnItemClickListener, AddCategoryDialog.AddCategoryDialogListener {
+        CategoryAdapter.OnItemClickListener,
+        AddCategoryDialog.AddCategoryDialogListener,
+        CreditCardAdapter.OnItemClickListener,
+        EditCreditDialog.EditCreditDialogListener{
 
     public static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
 
@@ -92,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainView,
                 LinearLayoutManager.VERTICAL, false);
         mCreditRecyclerView.setLayoutManager(layoutManager);
         mCreditRecyclerView.addItemDecoration(new DividerItemDecoration(this));
-        mCreditCardAdapter = new CreditCardAdapter();
+        mCreditCardAdapter = new CreditCardAdapter(this);
         mCreditRecyclerView.setAdapter(mCreditCardAdapter);
     }
 
@@ -159,12 +165,29 @@ public class MainActivity extends AppCompatActivity implements MainView,
 
     @Override
     public void onItemClick(Category item) {
+        Intent intent = new Intent(this, CategoryActivity.class);
+        intent.putExtra(CATEGORY_ID_ATTR, item.getId());
+        startActivity(intent);
 
     }
 
     @Override
     public void add(String name) {
         mPresenter.addCategory(name);
+    }
+
+    @Override
+    public void onItemClick(CreditCard item) {
+        Bundle bundle = new Bundle();
+        bundle.putLong(CREDIT_ID_ATTR, item.getId());
+        EditCreditDialog dialog = new EditCreditDialog();
+        dialog.setArguments(bundle);
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void changeRest(CreditCard creditCard, Float rest) {
+        mPresenter.changeRest(creditCard, rest);
     }
 }
 

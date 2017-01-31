@@ -12,4 +12,8 @@ public interface ICategoryProvider {
     Observable<Category> getAll();
 
     void create(String name);
+
+    Category get(Long id);
+
+    void change(Long id, String name, float cost, boolean monthly);
 }

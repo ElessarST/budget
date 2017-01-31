@@ -11,4 +11,7 @@ public interface ICreditCardProvider {
 
     Observable<CreditCard> getAllCreditCards();
 
+    CreditCard get(long id);
+
+    void changeRest(Long id, Float rest);
 }

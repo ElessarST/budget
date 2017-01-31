@@ -36,6 +36,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="farrakhov.aydar.spendings.screen.spending.SpendingActivity"/>
         </activity>
+        <activity
+            android:name=".screen.category.CategoryActivity"
+            android:label="@string/title_activity_category"
+            android:parentActivityName=".screen.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="farrakhov.aydar.spendings.screen.main.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

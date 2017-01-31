@@ -39,4 +39,24 @@ public class CategoryProvider implements ICategoryProvider {
         realm.copyToRealm(newCategory);
         realm.commitTransaction();
     }
+
+    @Override
+    public Category get(Long id) {
+        Realm realm = Realm.getDefaultInstance();
+        return realm.where(Category.class)
+                .equalTo("id", id)
+                .findFirst();
+    }
+
+    @Override
+    public void change(Long id, String name, float cost, boolean monthly) {
+        Realm realm = Realm.getDefaultInstance();
+        Category category = get(id);
+        realm.beginTransaction();
+        category.setSum(cost);
+        category.setMonthly(monthly);
+        category.setName(name);
+        realm.copyToRealm(category);
+        realm.commitTransaction();
+    }
 }

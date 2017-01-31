@@ -16,9 +16,11 @@ public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardHolder> {
 
     private final List<CreditCard> mCreditCards;
 
+    private final OnItemClickListener mListener;
 
-    public CreditCardAdapter() {
+    public CreditCardAdapter(OnItemClickListener listener) {
         mCreditCards = new ArrayList<>();
+        this.mListener = listener;
     }
 
     public void changeDataSet(@NonNull List<CreditCard> creditCards) {
@@ -35,7 +37,7 @@ public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardHolder> {
     @Override
     public void onBindViewHolder(CreditCardHolder holder, int position) {
         CreditCard creditCard = mCreditCards.get(position);
-        holder.bind(creditCard);
+        holder.bind(creditCard, mListener);
 
     }
 
@@ -44,4 +46,7 @@ public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardHolder> {
         return mCreditCards.size();
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(CreditCard item);
+    }
 }
