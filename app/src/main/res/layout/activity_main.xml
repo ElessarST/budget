@@ -3,10 +3,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true">
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,16 +17,11 @@
         tools:context="farrakhov.aydar.spendings.screen.main.MainActivity"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/updateAllButton"
-            android:text="@string/update_all"/>
 
         <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/credit_cards"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/credit_cards"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/creditRecyclerView"

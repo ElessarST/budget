@@ -48,9 +48,6 @@ public class MainActivity extends AppCompatActivity implements MainView,
     @BindView(R.id.categoriesRecyclerView)
     RecyclerView mCategoriesRecyclerView;
 
-    @BindView(R.id.updateAllButton)
-    Button mUpdateButton;
-
     @BindView(R.id.add_category)
     Button mCreateCategoryButton;
 
@@ -72,10 +69,6 @@ public class MainActivity extends AppCompatActivity implements MainView,
 
         mPresenter = new MainPresenter(this);
         mPresenter.init(this);
-
-        mUpdateButton.setOnClickListener(i -> {
-            mPresenter.updateAll(this);
-        });
 
         mCreateCategoryButton.setOnClickListener(i -> {
             new AddCategoryDialog()
