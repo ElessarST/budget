@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import farrakhov.aydar.spendings.R;
 import farrakhov.aydar.spendings.content.Category;
+import farrakhov.aydar.spendings.util.PriceUtil;
 
 public class CategoryActivity extends AppCompatActivity implements
         CategoryView, EditCategoryDialog.EditCategoryDialogListener {
@@ -59,7 +60,8 @@ public class CategoryActivity extends AppCompatActivity implements
         mCategory = category;
         categoryName.setText(category.getName());
         if (category.getSum() != null) {
-            budgetValue.setText(String.valueOf(category.getSum()));
+            budgetValue.setText(PriceUtil.format(category.getSum()) +
+                    (category.isMonthly() ? " в месяц" : " в день"));
         } else {
             budgetValue.setText(getString(R.string.not_specified));
         }
