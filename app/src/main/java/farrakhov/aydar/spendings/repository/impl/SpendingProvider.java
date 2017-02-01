@@ -1,10 +1,13 @@
 package farrakhov.aydar.spendings.repository.impl;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import farrakhov.aydar.spendings.content.Sms;
 import farrakhov.aydar.spendings.content.Spending;
+import farrakhov.aydar.spendings.content.helper.Period;
 import farrakhov.aydar.spendings.parser.ParserProvider;
 import farrakhov.aydar.spendings.repository.ISpendingProvider;
 import io.realm.Realm;
@@ -18,7 +21,6 @@ import rx.Observable;
 
 public class SpendingProvider implements ISpendingProvider {
 
-    private static final int DEFAULT_PAGE_SIZE = 10;
 
     @Override
     public Observable<Spending> saveSpending(Observable<Sms> messages) {
@@ -31,21 +33,31 @@ public class SpendingProvider implements ISpendingProvider {
     }
 
     @Override
-    public Observable<Spending> getSpendings(int page) {
+    public Observable<Spending> getSpendings(Period period) {
 
-        int offset = (page - 1) * DEFAULT_PAGE_SIZE;
-        int limit = DEFAULT_PAGE_SIZE;
 
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         List<Spending> spending = realm.where(Spending.class)
                 .findAllSorted("date", Sort.DESCENDING);
         realm.commitTransaction();
-        if (spending.size() > limit) {
-            spending = spending.subList(offset, limit);
-        }
         return  Observable.just(spending)
-                .flatMap(Observable::from);
+                .flatMap(Observable::from)
+                .filter(s -> isInPeriod(s, period));
+    }
+
+    private Boolean isInPeriod(Spending s, Period period) {
+        DateTime now = DateTime.now();
+        DateTime spending = new DateTime(s.getDate());
+        switch (period) {
+            case MONTH:
+                return spending.getMillis() >= now.dayOfMonth().withMinimumValue().getMillis();
+            case WEEK:
+                return spending.getMillis() >= now.dayOfWeek().withMinimumValue().getMillis();
+            case DAY:
+                return spending.getMillis() >= now.withTimeAtStartOfDay().getMillis();
+        }
+        return true;
     }
 
     @Override

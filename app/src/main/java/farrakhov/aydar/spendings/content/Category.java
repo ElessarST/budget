@@ -8,7 +8,6 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class Category extends RealmObject {
-
     @PrimaryKey
     private Long id;
 

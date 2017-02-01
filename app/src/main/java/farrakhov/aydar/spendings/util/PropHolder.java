@@ -9,7 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import farrakhov.aydar.spendings.R;
-import farrakhov.aydar.spendings.content.Prop;
+import farrakhov.aydar.spendings.content.helper.Prop;
 
 /**
  * @author Aydar Farrakhov

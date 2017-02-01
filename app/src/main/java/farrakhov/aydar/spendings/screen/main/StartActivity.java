@@ -22,12 +22,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import farrakhov.aydar.spendings.R;
-import farrakhov.aydar.spendings.content.Category;
 import farrakhov.aydar.spendings.content.CreditCard;
 import farrakhov.aydar.spendings.content.Spending;
+import farrakhov.aydar.spendings.content.helper.CategoryWithDetails;
+import farrakhov.aydar.spendings.content.helper.Period;
 import farrakhov.aydar.spendings.screen.category.CategoryActivity;
 import farrakhov.aydar.spendings.screen.spending.SpendingActivity;
 import farrakhov.aydar.spendings.util.PriceUtil;
@@ -80,13 +82,19 @@ public class StartActivity extends AppCompatActivity {
         TextView mTotalRest;
         TextView mTotalSpendings;
         TextView mLastSpending;
-        LinearLayout mAnimated;
+        TextView mLeftForSpending;
+        LinearLayout mCreditCard;
+        LinearLayout mCategoriesCard;
+        LinearLayout mSpendingsCard;
+        Period mPeriod;
 
         public static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
 
         private SpendingsAdapter mAdapter;
         private CreditCardAdapter mCreditCardAdapter;
         private CategoryAdapter mCategoryAdapter;
+
+        private float mTotalPlaned;
 
         public PlaceholderFragment() {
         }
@@ -111,35 +119,53 @@ public class StartActivity extends AppCompatActivity {
             mTotalRest = (TextView) rootView.findViewById(R.id.rest_total) ;
             mTotalSpendings = (TextView) rootView.findViewById(R.id.total_spendings);
             mLastSpending = (TextView) rootView.findViewById(R.id.last_spending);
-            mAnimated = (LinearLayout) rootView.findViewById(R.id.animated);
+            mCreditCard = (LinearLayout) rootView.findViewById(R.id.animated_credit_card);
+            mCategoriesCard = (LinearLayout) rootView.findViewById(R.id.animated_categories_card);
+            mSpendingsCard = (LinearLayout) rootView.findViewById(R.id.animated_spendings_card);
+            mLeftForSpending = (TextView) rootView.findViewById(R.id.left_for_spending);
 
-            mAnimated.setOnClickListener(l -> {
-                if (View.VISIBLE == mCreditRecyclerView.getVisibility()) {
-                    mCreditRecyclerView.setVisibility(View.GONE);
-                    return;
-                }
-                mCreditRecyclerView.setVisibility(View.VISIBLE);
+            mCreditCard.setOnClickListener(l -> toggleRecycler(mCreditRecyclerView));
+            mCategoriesCard.setOnClickListener(l -> toggleRecycler(mCategoriesRecyclerView));
+            mSpendingsCard.setOnClickListener(l -> toggleRecycler(mSpendingsRecycler));
+
+            init();
+
+            mCreateCategoryButton.setOnClickListener(i -> {
+                new AddCategoryDialog()
+                        .setListener(this)
+                        .show(getActivity().getFragmentManager(), "dialog");
             });
+            return rootView;
+        }
 
+        private void init() {
             initSpendings();
             initCreditCards();
             initCategories();
 
-            mPresenter = new MainPresenter(this);
+            mPeriod = Period.getByNum(getArguments().getInt(ARG_SECTION_NUMBER));
+            mPresenter = new MainPresenter(this, mPeriod);
             mPresenter.init(getActivity());
+        }
 
-            mCreateCategoryButton.setOnClickListener(i -> {
-                new AddCategoryDialog()
-                        .show(getActivity().getFragmentManager(), "dialog");
-            });
-            return rootView;
+        @Override
+        public void onResume() {
+            super.onResume();
+            init();
+        }
+
+        private void toggleRecycler(RecyclerView view) {
+            if (View.VISIBLE == view.getVisibility()) {
+                view.setVisibility(View.GONE);
+                return;
+            }
+            view.setVisibility(View.VISIBLE);
         }
 
         private void initCategories() {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
                     LinearLayoutManager.VERTICAL, false);
             mCategoriesRecyclerView.setLayoutManager(layoutManager);
-            mCategoriesRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
             mCategoryAdapter = new CategoryAdapter(this);
             mCategoriesRecyclerView.setAdapter(mCategoryAdapter);
         }
@@ -156,7 +182,6 @@ public class StartActivity extends AppCompatActivity {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
                     LinearLayoutManager.VERTICAL, false);
             mSpendingsRecycler.setLayoutManager(layoutManager);
-            mSpendingsRecycler.addItemDecoration(new DividerItemDecoration(getActivity()));
             mAdapter = new SpendingsAdapter(this);
             mSpendingsRecycler.setAdapter(mAdapter);
         }
@@ -197,10 +222,16 @@ public class StartActivity extends AppCompatActivity {
             for (Spending spending : spendingList) {
                 total += spending.getSum();
             }
-            Spending last = spendingList.get(0);
-            mLastSpending.setText(String.format("%s - %s", PriceUtil.format(last.getSum()),
-                    last.getShop().getDisplayName()));
+            if (spendingList.size() > 0) {
+                Spending last = spendingList.get(0);
+                mLastSpending.setText(String.format("%s - %s", PriceUtil.format(last.getSum()),
+                        last.getShop().getDisplayName()));
+            } else {
+                mLastSpending.setText("-");
+            }
+
             mTotalSpendings.setText(PriceUtil.format(total));
+            mLeftForSpending.setText(PriceUtil.format(mTotalPlaned - total));
             mAdapter.changeDataSet(spendingList);
         }
 
@@ -215,7 +246,14 @@ public class StartActivity extends AppCompatActivity {
         }
 
         @Override
-        public void showCategories(List<Category> categories) {
+        public void showCategories(List<CategoryWithDetails> categories) {
+            mTotalPlaned = 0;
+            for (CategoryWithDetails category : categories) {
+                if (Period.MONTH.equals(mPeriod) || !category.isMonthly()) {
+                    mTotalPlaned += category.getPlanned();
+                }
+            }
+            Collections.sort(categories, (c1, c2) -> c2.getTotal() - c1.getTotal() > 0 ? 1 : -1);
             mCategoryAdapter.changeDataSet(categories);
         }
 
@@ -227,7 +265,7 @@ public class StartActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onItemClick(Category item) {
+        public void onItemClick(CategoryWithDetails item) {
             Intent intent = new Intent(getActivity(), CategoryActivity.class);
             intent.putExtra(CATEGORY_ID_ATTR, item.getId());
             startActivity(intent);

@@ -4,11 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import farrakhov.aydar.spendings.content.Category;
 import farrakhov.aydar.spendings.content.CreditCard;
 import farrakhov.aydar.spendings.content.Spending;
+import farrakhov.aydar.spendings.content.helper.CategoryWithDetails;
+import farrakhov.aydar.spendings.content.helper.Period;
 import farrakhov.aydar.spendings.repository.RepositoryProvider;
 import farrakhov.aydar.spendings.util.SMSReader;
 
@@ -19,9 +22,11 @@ import farrakhov.aydar.spendings.util.SMSReader;
 public class MainPresenter {
 
     private final MainView mView;
+    private final Period mPeriod;
 
-    public MainPresenter(@NonNull MainView view) {
+    public MainPresenter(@NonNull MainView view, Period period) {
         mView = view;
+        mPeriod = period;
     }
 
     public void init(Context context) {
@@ -30,16 +35,32 @@ public class MainPresenter {
         RepositoryProvider.provideSpendingRepository()
                 .saveSpending(SMSReader.getNewSms(context));
         showCreditCards();
-        showSpendings();
-        showCategories();
+        showSpendingsAndCategories();
     }
 
-    private void showCategories() {
-        List<Category> categories = new ArrayList<>();
+    private void showSpendingsAndCategories() {
+        Map<Long, CategoryWithDetails> categories = new HashMap<>();
+        for (CategoryWithDetails cat : getCategories()) {
+            cat.setPeriod(mPeriod);
+            categories.put(cat.getId(), cat);
+        }
+        List<Spending> spendings = getSpendings();
+        for (Spending spending : spendings) {
+            Long categoryId = spending.getShop().getCategory().getId();
+            CategoryWithDetails categoryWithDetails = categories.get(categoryId);
+            categoryWithDetails.addSpending(spending.getSum());
+        }
+        mView.showCategories(new ArrayList<>(categories.values()));
+        mView.showSpendings(spendings);
+    }
+
+    private List<CategoryWithDetails> getCategories() {
+        List<CategoryWithDetails> categories = new ArrayList<>();
         RepositoryProvider.provideCategoryRepository()
                 .getAll()
+                .map(CategoryWithDetails::new)
                 .subscribe(categories::add);
-        mView.showCategories(categories);
+        return categories;
     }
 
     private void showCreditCards() {
@@ -50,11 +71,11 @@ public class MainPresenter {
         mView.showCreditCards(creditCards);
     }
 
-    private void showSpendings() {
+    private List<Spending> getSpendings() {
         List<Spending> spendingList = new ArrayList<>();
-        RepositoryProvider.provideSpendingRepository().getSpendings(1)
+        RepositoryProvider.provideSpendingRepository().getSpendings(mPeriod)
                 .subscribe(spendingList::add);
-        mView.showSpendings(spendingList);
+        return spendingList;
     }
 
 
@@ -68,7 +89,7 @@ public class MainPresenter {
 
     public void addCategory(String name) {
         RepositoryProvider.provideCategoryRepository().create(name);
-        showCategories();
+        showSpendingsAndCategories();
     }
 
     public void changeRest(CreditCard creditCard, Float rest) {

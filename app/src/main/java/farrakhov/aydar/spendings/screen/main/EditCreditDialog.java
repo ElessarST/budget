@@ -34,7 +34,7 @@ public class EditCreditDialog extends DialogFragment {
         CreditCard creditCard = RepositoryProvider.provideCreditCardProvider()
                 .get(getArguments().getLong(CREDIT_ID_ATTR));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getString(R.string.add));
+        builder.setTitle(getString(R.string.change));
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.change_credit_dialog, null);
         builder.setView(view)

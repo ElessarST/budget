@@ -1,4 +1,4 @@
-package farrakhov.aydar.spendings.content;
+package farrakhov.aydar.spendings.content.helper;
 
 /**
  * Created by aydar farrakhov on 30.01.17.

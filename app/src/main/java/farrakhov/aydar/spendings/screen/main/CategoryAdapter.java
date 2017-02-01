@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import farrakhov.aydar.spendings.content.Category;
+import farrakhov.aydar.spendings.content.helper.CategoryWithDetails;
 
 /**
  * @author Aydar Farrakhov
  */
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
 
-    private final List<Category> mCategories;
+    private final List<CategoryWithDetails> mCategories;
     private final OnItemClickListener listener;
 
     public CategoryAdapter(OnItemClickListener listener) {
@@ -22,7 +22,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
         this.listener = listener;
     }
 
-    public void changeDataSet(@NonNull List<Category> categories) {
+    public void changeDataSet(@NonNull List<CategoryWithDetails> categories) {
         mCategories.clear();
         mCategories.addAll(categories);
         notifyDataSetChanged();
@@ -35,7 +35,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
 
     @Override
     public void onBindViewHolder(CategoryHolder holder, int position) {
-        Category category = mCategories.get(position);
+        CategoryWithDetails category = mCategories.get(position);
         holder.bind(category, listener);
 
     }
@@ -46,7 +46,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Category item);
+        void onItemClick(CategoryWithDetails item);
     }
 
 }

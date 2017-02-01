@@ -9,7 +9,9 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import farrakhov.aydar.spendings.R;
-import farrakhov.aydar.spendings.content.Category;
+import farrakhov.aydar.spendings.content.helper.CategoryWithDetails;
+import farrakhov.aydar.spendings.content.helper.Period;
+import farrakhov.aydar.spendings.util.PriceUtil;
 
 /**
  * @author Aydar Farrakhov
@@ -19,11 +21,16 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.category_name)
     TextView nameTV;
 
+    @BindView(R.id.category_spending)
+    TextView categorySpending;
 
+    @BindView(R.id.left_for_spending)
+    TextView leftForSpending;
 
     @NonNull
     public static CategoryHolder create(@NonNull Context context) {
         View view = View.inflate(context, R.layout.category_item, null);
+        view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         return new CategoryHolder(view);
     }
 
@@ -32,8 +39,14 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(@NonNull Category category, CategoryAdapter.OnItemClickListener listener) {
+    public void bind(@NonNull CategoryWithDetails category, CategoryAdapter.OnItemClickListener listener) {
         nameTV.setText(category.getName());
+        categorySpending.setText(PriceUtil.format(category.getTotal()));
+        if (category.getPeriod().equals(Period.MONTH) || !category.isMonthly()) {
+            leftForSpending.setText(PriceUtil.format(category.getPlanned() - category.getTotal()));
+        } else {
+            leftForSpending.setText("-");
+        }
         itemView.setOnClickListener(v -> listener.onItemClick(category));
     }
 }

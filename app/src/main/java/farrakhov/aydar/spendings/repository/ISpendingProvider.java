@@ -2,6 +2,7 @@ package farrakhov.aydar.spendings.repository;
 
 import farrakhov.aydar.spendings.content.Sms;
 import farrakhov.aydar.spendings.content.Spending;
+import farrakhov.aydar.spendings.content.helper.Period;
 import rx.Observable;
 
 /**
@@ -12,7 +13,7 @@ public interface ISpendingProvider {
 
     Observable<Spending> saveSpending(Observable<Sms> messages);
 
-    Observable<Spending> getSpendings(int page);
+    Observable<Spending> getSpendings(Period period);
 
     Spending get(Long id);
 

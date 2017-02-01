@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import farrakhov.aydar.spendings.content.Prop;
+import farrakhov.aydar.spendings.content.helper.Prop;
 
 /**
  * @author Aydar Farrakhov
