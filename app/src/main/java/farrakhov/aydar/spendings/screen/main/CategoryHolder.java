@@ -13,6 +13,8 @@ import farrakhov.aydar.spendings.content.helper.CategoryWithDetails;
 import farrakhov.aydar.spendings.content.helper.Period;
 import farrakhov.aydar.spendings.util.PriceUtil;
 
+import static farrakhov.aydar.spendings.util.PriceUtil.colorize;
+
 /**
  * @author Aydar Farrakhov
  */
@@ -39,14 +41,17 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(@NonNull CategoryWithDetails category, CategoryAdapter.OnItemClickListener listener) {
+    public void bind(@NonNull CategoryWithDetails category, CategoryAdapter.OnItemClickListener listener, Context context) {
         nameTV.setText(category.getName());
         categorySpending.setText(PriceUtil.format(category.getTotal()));
         if (category.getPeriod().equals(Period.MONTH) || !category.isMonthly()) {
+            float left = category.getPlanned() - category.getTotal();
             leftForSpending.setText(PriceUtil.format(category.getPlanned() - category.getTotal()));
+            colorize(leftForSpending, left, context);
         } else {
             leftForSpending.setText("-");
         }
+
         itemView.setOnClickListener(v -> listener.onItemClick(category));
     }
 }

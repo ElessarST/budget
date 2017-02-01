@@ -18,7 +18,7 @@ import io.realm.Realm;
 
 public abstract class CommonParser implements IParser {
 
-    private static final String UNKNOWN_NAME = "Другие";
+    public static final String UNKNOWN_NAME = "Другие";
 
     @Override
     public Spending parse(String text, Date date, long smsId) {

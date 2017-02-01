@@ -1,15 +1,20 @@
 package farrakhov.aydar.spendings.screen.category;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import farrakhov.aydar.spendings.R;
 import farrakhov.aydar.spendings.content.Category;
+import farrakhov.aydar.spendings.repository.RepositoryProvider;
 import farrakhov.aydar.spendings.util.PriceUtil;
 
 public class CategoryActivity extends AppCompatActivity implements
@@ -25,6 +30,9 @@ public class CategoryActivity extends AppCompatActivity implements
 
     @BindView(R.id.budget_value)
     public TextView budgetValue;
+
+    @BindView(R.id.delete_category)
+    public Button deleteCategory;
 
     private Category mCategory;
 
@@ -51,6 +59,18 @@ public class CategoryActivity extends AppCompatActivity implements
 
         mPresenter = new CategoryPresenter(this);
         mPresenter.init(getIntent().getLongExtra(CATEGORY_ID_ATTR, 0L));
+
+        deleteCategory.setOnClickListener(l -> {
+            RepositoryProvider.provideCategoryRepository().delete(mCategory.getId());
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            } else {
+                NavUtils.navigateUpTo(this, upIntent);
+            }
+        });
 
     }
 

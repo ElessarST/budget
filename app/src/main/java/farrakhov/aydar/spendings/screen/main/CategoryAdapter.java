@@ -1,5 +1,6 @@
 package farrakhov.aydar.spendings.screen.main;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -16,9 +17,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
 
     private final List<CategoryWithDetails> mCategories;
     private final OnItemClickListener listener;
+    private Context mContext;
 
-    public CategoryAdapter(OnItemClickListener listener) {
+    public CategoryAdapter(OnItemClickListener listener, Context context) {
         mCategories = new ArrayList<>();
+        this.mContext = context;
         this.listener = listener;
     }
 
@@ -36,7 +39,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
     @Override
     public void onBindViewHolder(CategoryHolder holder, int position) {
         CategoryWithDetails category = mCategories.get(position);
-        holder.bind(category, listener);
+        holder.bind(category, listener, mContext);
 
     }
 

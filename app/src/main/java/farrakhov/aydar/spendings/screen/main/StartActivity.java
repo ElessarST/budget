@@ -18,7 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,6 +40,7 @@ import farrakhov.aydar.spendings.util.SMSReader;
 import static farrakhov.aydar.spendings.screen.category.CategoryActivity.CATEGORY_ID_ATTR;
 import static farrakhov.aydar.spendings.screen.main.EditCreditDialog.CREDIT_ID_ATTR;
 import static farrakhov.aydar.spendings.screen.spending.SpendingActivity.SPENDING_ID_ATTR;
+import static farrakhov.aydar.spendings.util.PriceUtil.colorize;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -91,7 +92,7 @@ public class StartActivity extends AppCompatActivity {
         RecyclerView mSpendingsRecycler;
         RecyclerView mCreditRecyclerView;
         RecyclerView mCategoriesRecyclerView;
-        Button mCreateCategoryButton;
+        ImageButton mCreateCategoryButton;
         TextView mTotalRest;
         TextView mTotalSpendings;
         TextView mLastSpending;
@@ -132,7 +133,7 @@ public class StartActivity extends AppCompatActivity {
             mSpendingsRecycler = (RecyclerView) rootView.findViewById(R.id.recyclerView);
             mCreditRecyclerView = (RecyclerView) rootView.findViewById(R.id.creditRecyclerView);
             mCategoriesRecyclerView = (RecyclerView) rootView.findViewById(R.id.categoriesRecyclerView);
-            mCreateCategoryButton = (Button) rootView.findViewById(R.id.add_category);
+            mCreateCategoryButton = (ImageButton) rootView.findViewById(R.id.add_category);
             mTotalRest = (TextView) rootView.findViewById(R.id.rest_total) ;
             mTotalSpendings = (TextView) rootView.findViewById(R.id.total_spendings);
             mLastSpending = (TextView) rootView.findViewById(R.id.last_spending);
@@ -183,7 +184,7 @@ public class StartActivity extends AppCompatActivity {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
                     LinearLayoutManager.VERTICAL, false);
             mCategoriesRecyclerView.setLayoutManager(layoutManager);
-            mCategoryAdapter = new CategoryAdapter(this);
+            mCategoryAdapter = new CategoryAdapter(this, getContext());
             mCategoriesRecyclerView.setAdapter(mCategoryAdapter);
         }
 
@@ -249,6 +250,7 @@ public class StartActivity extends AppCompatActivity {
 
             mTotalSpendings.setText(PriceUtil.format(total));
             mLeftForSpending.setText(PriceUtil.format(mTotalPlaned - total));
+            colorize(mLeftForSpending, mTotalPlaned - total, getContext());
             mAdapter.changeDataSet(spendingList);
         }
 

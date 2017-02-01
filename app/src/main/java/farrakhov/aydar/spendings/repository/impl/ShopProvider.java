@@ -7,8 +7,8 @@ import farrakhov.aydar.spendings.content.Shop;
 import farrakhov.aydar.spendings.content.ShopBankName;
 import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.repository.IShopProvider;
+import farrakhov.aydar.spendings.util.RealmUtil;
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
 
 /**
@@ -57,8 +57,7 @@ public class ShopProvider implements IShopProvider {
             spending.setShop(mainShop);
         }
         mainShop.getSpending().addAll(spendings);
-        RealmResults<Shop> result = realm.where(Shop.class).equalTo("id", unionShop.getId()).findAll();
-        result.deleteAllFromRealm();
+        RealmUtil.delete(unionShop.getId(), realm, Shop.class);
         realm.commitTransaction();
     }
 

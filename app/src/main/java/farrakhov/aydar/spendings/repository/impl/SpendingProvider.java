@@ -10,6 +10,7 @@ import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.content.helper.Period;
 import farrakhov.aydar.spendings.parser.ParserProvider;
 import farrakhov.aydar.spendings.repository.ISpendingProvider;
+import farrakhov.aydar.spendings.util.RealmUtil;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -91,6 +92,14 @@ public class SpendingProvider implements ISpendingProvider {
         realm.beginTransaction();
         spending.setSum(sum);
         realm.copyToRealm(spending);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void delete(Long spendingId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        RealmUtil.delete(spendingId, realm, Spending.class);
         realm.commitTransaction();
     }
 

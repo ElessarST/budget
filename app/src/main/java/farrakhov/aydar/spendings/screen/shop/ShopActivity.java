@@ -43,10 +43,10 @@ public class ShopActivity extends AppCompatActivity implements ShopView, EditSho
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mShopPresenter = new ShopPresenter(this);
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        Long id = settings.getLong(SHOP_ID_ATTR, 0);
+        Long id = getIntent().getLongExtra(SHOP_ID_ATTR, 0);
         if (id == 0) {
-            id = getIntent().getLongExtra(SHOP_ID_ATTR, 0);
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            id = settings.getLong(SHOP_ID_ATTR, 0);
         }
         mShopPresenter.init(id);
 

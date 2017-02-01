@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +39,9 @@ public class SpendingActivity extends AppCompatActivity implements SpendingView,
     @BindView(R.id.fab)
     public FloatingActionButton editButton;
 
+    @BindView(R.id.delete_spending)
+    public Button deleteSpending;
+
     private Long shopId;
     private Long spendingId;
 
@@ -50,10 +56,10 @@ public class SpendingActivity extends AppCompatActivity implements SpendingView,
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSpendingPresenter = new SpendingPresenter(this);
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        spendingId = settings.getLong(SPENDING_ID_ATTR, 0);
+        spendingId = getIntent().getLongExtra(SPENDING_ID_ATTR, 0);
         if (spendingId == 0) {
-            spendingId = getIntent().getLongExtra(SPENDING_ID_ATTR, 0);
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            spendingId = settings.getLong(SPENDING_ID_ATTR, 0);
         }
         mSpendingPresenter.init(spendingId);
 
@@ -71,6 +77,19 @@ public class SpendingActivity extends AppCompatActivity implements SpendingView,
             Intent intent = new Intent(this, ShopActivity.class);
             intent.putExtra(ShopActivity.SHOP_ID_ATTR, this.shopId);
             startActivity(intent);
+        });
+
+        deleteSpending.setOnClickListener(l -> {
+            RepositoryProvider.provideSpendingRepository()
+                    .delete(spendingId);
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            } else {
+                NavUtils.navigateUpTo(this, upIntent);
+            }
         });
     }
 

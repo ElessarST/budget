@@ -59,4 +59,12 @@ public class CategoryProvider implements ICategoryProvider {
         realm.copyToRealm(category);
         realm.commitTransaction();
     }
+
+    @Override
+    public void delete(Long id) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        RealmUtil.delete(id, realm, Category.class);
+        realm.commitTransaction();
+    }
 }

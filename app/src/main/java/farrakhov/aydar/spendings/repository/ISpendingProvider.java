@@ -22,4 +22,7 @@ public interface ISpendingProvider {
     void deleteAllSpendings();
 
     void change(Long id, Float sum);
+
+    void delete(Long spendingId);
+
 }

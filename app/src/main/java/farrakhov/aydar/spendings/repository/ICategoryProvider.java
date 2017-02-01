@@ -16,4 +16,6 @@ public interface ICategoryProvider {
     Category get(Long id);
 
     void change(Long id, String name, float cost, boolean monthly);
+
+    void delete(Long id);
 }

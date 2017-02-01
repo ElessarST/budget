@@ -1,6 +1,8 @@
 package farrakhov.aydar.spendings.util;
 
 import io.realm.Realm;
+import io.realm.RealmModel;
+import io.realm.RealmResults;
 
 /**
  * Created by aydar farrakhov on 30.01.17.
@@ -14,6 +16,11 @@ public class RealmUtil {
             return 1L;
         }
         return (long) (number) + 1;
+    }
+
+    public static <T extends RealmModel> void delete(Long id, Realm realm, Class<T> c) {
+        RealmResults<T> result = realm.where(c).equalTo("id", id).findAll();
+        result.deleteAllFromRealm();
     }
 
 }
