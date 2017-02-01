@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ import farrakhov.aydar.spendings.content.CreditCard;
 import farrakhov.aydar.spendings.content.Spending;
 import farrakhov.aydar.spendings.screen.category.CategoryActivity;
 import farrakhov.aydar.spendings.screen.spending.SpendingActivity;
+import farrakhov.aydar.spendings.util.PriceUtil;
 import farrakhov.aydar.spendings.util.SMSReader;
 import farrakhov.aydar.spendings.widget.DividerItemDecoration;
 
@@ -74,6 +76,9 @@ public class StartActivity extends AppCompatActivity {
         RecyclerView mCreditRecyclerView;
         RecyclerView mCategoriesRecyclerView;
         Button mCreateCategoryButton;
+        TextView mTotalRest;
+        TextView mTotalSpendings;
+        TextView mLastSpending;
 
         public static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
 
@@ -101,6 +106,9 @@ public class StartActivity extends AppCompatActivity {
             mCreditRecyclerView = (RecyclerView) rootView.findViewById(R.id.creditRecyclerView);
             mCategoriesRecyclerView = (RecyclerView) rootView.findViewById(R.id.categoriesRecyclerView);
             mCreateCategoryButton = (Button) rootView.findViewById(R.id.add_category);
+            mTotalRest = (TextView) rootView.findViewById(R.id.rest_total) ;
+            mTotalSpendings = (TextView) rootView.findViewById(R.id.total_spendings);
+            mLastSpending = (TextView) rootView.findViewById(R.id.last_spending);
 
             initSpendings();
             initCreditCards();
@@ -175,11 +183,24 @@ public class StartActivity extends AppCompatActivity {
 
         @Override
         public void showSpendings(List<Spending> spendingList) {
+            Float total = 0f;
+            for (Spending spending : spendingList) {
+                total += spending.getSum();
+            }
+            Spending last = spendingList.get(0);
+            mLastSpending.setText(String.format("%s - %s", PriceUtil.format(last.getSum()),
+                    last.getShop().getDisplayName()));
+            mTotalSpendings.setText(PriceUtil.format(total));
             mAdapter.changeDataSet(spendingList);
         }
 
         @Override
         public void showCreditCards(List<CreditCard> creditCards) {
+            Float total = 0f;
+            for (CreditCard creditCard : creditCards) {
+                total += creditCard.getCredit();
+            }
+            mTotalRest.setText(PriceUtil.format(total));
             mCreditCardAdapter.changeDataSet(creditCards);
         }
 

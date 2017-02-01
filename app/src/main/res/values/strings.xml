@@ -24,7 +24,9 @@
     <string name="not_specified">Не задан</string>
     <string name="monthly">Бюджет на месяц</string>
     <string name="rest">Остаток</string>
-    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_start">Spendings</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="spent">Потрачено</string>
+    <string name="last_spending">Последняя покупка</string>
 </resources>

@@ -36,7 +36,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="farrakhov.aydar.spendings.screen.main.MainActivity"/>
+                android:value="farrakhov.aydar.spendings.screen.main.StartActivity"/>
         </activity>
         <activity
             android:name=".screen.main.StartActivity"
