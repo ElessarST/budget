@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -79,6 +80,7 @@ public class StartActivity extends AppCompatActivity {
         TextView mTotalRest;
         TextView mTotalSpendings;
         TextView mLastSpending;
+        LinearLayout mAnimated;
 
         public static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
 
@@ -109,6 +111,15 @@ public class StartActivity extends AppCompatActivity {
             mTotalRest = (TextView) rootView.findViewById(R.id.rest_total) ;
             mTotalSpendings = (TextView) rootView.findViewById(R.id.total_spendings);
             mLastSpending = (TextView) rootView.findViewById(R.id.last_spending);
+            mAnimated = (LinearLayout) rootView.findViewById(R.id.animated);
+
+            mAnimated.setOnClickListener(l -> {
+                if (View.VISIBLE == mCreditRecyclerView.getVisibility()) {
+                    mCreditRecyclerView.setVisibility(View.GONE);
+                    return;
+                }
+                mCreditRecyclerView.setVisibility(View.VISIBLE);
+            });
 
             initSpendings();
             initCreditCards();
@@ -137,7 +148,6 @@ public class StartActivity extends AppCompatActivity {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
                     LinearLayoutManager.VERTICAL, false);
             mCreditRecyclerView.setLayoutManager(layoutManager);
-            mCreditRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
             mCreditCardAdapter = new CreditCardAdapter(this);
             mCreditRecyclerView.setAdapter(mCreditCardAdapter);
         }
@@ -234,6 +244,7 @@ public class StartActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putLong(CREDIT_ID_ATTR, item.getId());
             EditCreditDialog dialog = new EditCreditDialog();
+            dialog.setListener(this);
             dialog.setArguments(bundle);
             dialog.show(getActivity().getFragmentManager(), "dialog");
         }

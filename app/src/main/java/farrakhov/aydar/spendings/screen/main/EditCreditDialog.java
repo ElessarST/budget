@@ -2,7 +2,6 @@ package farrakhov.aydar.spendings.screen.main;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -51,14 +50,7 @@ public class EditCreditDialog extends DialogFragment {
         return dialog;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (EditCreditDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement EditCreditDialogListener");
-        }
+    public void setListener(EditCreditDialogListener listener) {
+        mListener = listener;
     }
 }

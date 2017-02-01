@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import farrakhov.aydar.spendings.R;
 import farrakhov.aydar.spendings.content.CreditCard;
+import farrakhov.aydar.spendings.util.PriceUtil;
 
 /**
  * Created by aydar farrakhov on 14.12.16.
@@ -26,6 +27,7 @@ public class CreditCardHolder extends RecyclerView.ViewHolder {
     @NonNull
     public static CreditCardHolder create(@NonNull Context context) {
         View view = View.inflate(context, R.layout.credit_card_item, null);
+        view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         return new CreditCardHolder(view);
     }
 
@@ -36,8 +38,10 @@ public class CreditCardHolder extends RecyclerView.ViewHolder {
 
     public void bind(@NonNull CreditCard creditCard, CreditCardAdapter.OnItemClickListener listener) {
         numberTV.setText(creditCard.getNumber());
-        restValTV.setText(String.valueOf(creditCard.getCredit()));
+        restValTV.setText(PriceUtil.format(creditCard.getCredit()));
         itemView.setOnClickListener(v -> listener.onItemClick(creditCard));
     }
+
+
 }
 

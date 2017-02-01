@@ -1,21 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_standard"
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/padding_72"
+    android:paddingEnd="@dimen/padding_medium"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_standard">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/number"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_small"/>
+            <TextView
+                android:id="@+id/rest_val"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text.16"/>
+            <TextView
+                android:id="@+id/number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text.12"
+                android:text="@string/rest"/>
 
-    <TextView
-        android:id="@+id/rest_val"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_small"/>
+        </LinearLayout>
+
+    </FrameLayout>
 
 
-</LinearLayout>
+</FrameLayout>
