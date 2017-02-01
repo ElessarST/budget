@@ -84,6 +84,15 @@ public class SpendingProvider implements ISpendingProvider {
         realm.commitTransaction();
     }
 
+    @Override
+    public void change(Long id, Float sum) {
+        Spending spending = get(id);
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        spending.setSum(sum);
+        realm.copyToRealm(spending);
+        realm.commitTransaction();
+    }
 
 
 }

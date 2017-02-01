@@ -1,5 +1,6 @@
 package farrakhov.aydar.spendings.screen.shop;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import farrakhov.aydar.spendings.screen.shop.dialog.EditShopDialog;
 public class ShopActivity extends AppCompatActivity implements ShopView, EditShopDialog.EditShopDialogListener {
 
     public static final String SHOP_ID_ATTR = "shop_id";
+    public static final String PREFS_NAME = "prefs";
 
     private ShopPresenter mShopPresenter;
 
@@ -41,7 +43,12 @@ public class ShopActivity extends AppCompatActivity implements ShopView, EditSho
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mShopPresenter = new ShopPresenter(this);
-        mShopPresenter.init(getIntent().getLongExtra(SHOP_ID_ATTR, 0));
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        Long id = settings.getLong(SHOP_ID_ATTR, 0);
+        if (id == 0) {
+            id = getIntent().getLongExtra(SHOP_ID_ATTR, 0);
+        }
+        mShopPresenter.init(id);
 
         editButton.setOnClickListener(l -> {
             Bundle bundle = new Bundle();
@@ -50,8 +57,16 @@ public class ShopActivity extends AppCompatActivity implements ShopView, EditSho
             dialog.setArguments(bundle);
             dialog.show(getFragmentManager(), "dialog");
         });
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(SHOP_ID_ATTR, shop.getId());
 
+        editor.apply();
+        super.onSaveInstanceState(outState);
     }
 
     @Override

@@ -23,7 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import farrakhov.aydar.spendings.R;
 import farrakhov.aydar.spendings.content.CreditCard;
@@ -34,7 +36,6 @@ import farrakhov.aydar.spendings.screen.category.CategoryActivity;
 import farrakhov.aydar.spendings.screen.spending.SpendingActivity;
 import farrakhov.aydar.spendings.util.PriceUtil;
 import farrakhov.aydar.spendings.util.SMSReader;
-import farrakhov.aydar.spendings.widget.DividerItemDecoration;
 
 import static farrakhov.aydar.spendings.screen.category.CategoryActivity.CATEGORY_ID_ATTR;
 import static farrakhov.aydar.spendings.screen.main.EditCreditDialog.CREDIT_ID_ATTR;
@@ -45,6 +46,8 @@ public class StartActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+
+    static Map<Integer, PlaceholderFragment> mFragmentMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,16 @@ public class StartActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int pos = mViewPager.getCurrentItem();
+        if (mFragmentMap.containsKey(pos)) {
+            mFragmentMap.get(pos).init();
+        }
 
     }
 
@@ -104,6 +117,10 @@ public class StartActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+            if (mFragmentMap == null) {
+                mFragmentMap = new HashMap<>();
+            }
+            mFragmentMap.put(sectionNumber, fragment);
             return fragment;
         }
 

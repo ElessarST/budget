@@ -20,4 +20,6 @@ public interface ISpendingProvider {
     Spending getLastSpending();
 
     void deleteAllSpendings();
+
+    void change(Long id, Float sum);
 }
